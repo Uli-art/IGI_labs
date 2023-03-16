@@ -1,24 +1,20 @@
 import re
+from constants import rxForSentences, rxForNameAbbreviations, rxForNonDeclarative, rxForWords, rxForNumbers
 
 
 def countOfSentences(text: str):
-    regex = r'((([a-x0-9\)][\.])|(\.\.\.)|(([\?!]+)))[\'\"\)]?[\s+\n][A-X0-9\'\"\(])|(\.[\"\'\)]?$)'
-    rxForNameAbbreviations = r'(\b([Mm]r|[Mm]rs|[Dd]r|[Ll]t|[Rr]ep)\.)'
     notASentence = re.findall(rxForNameAbbreviations, text)
-    matches = re.findall(regex, text)
+    matches = re.findall(rxForSentences, text)
     print(matches)
     return len(matches) - len(notASentence)
 
 
 def nonDeclarativeSentences(text: str):
-    rx = r'[\?!]+'
-    matches = re.findall(rx, text)
+    matches = re.findall(rxForNonDeclarative, text)
     return len(matches)
 
 
 def textLength(text: str):
-    rxForWords = r'\b[\w]+\b'
-    rxForNumbers = r'\b[0-9]+\b'
     wordMatches = re.findall(rxForWords, text)
     numbersMatches = re.findall(rxForNumbers, text)
     textLen = 0
@@ -29,8 +25,6 @@ def textLength(text: str):
 
 
 def listOfWords(text: str):
-    rxForWords = r'\b[\w]+\b'
-    rxForNumbers = r'\b[0-9]+\b'
     wordMatches = re.findall(rxForWords, text)
     numbersMatches = re.findall(rxForNumbers, text)
     textLen = []
