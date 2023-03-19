@@ -13,7 +13,7 @@ class Storage:
         self.currentUser = ""
         self.currentContainer = set()
 
-    def initialisation(self):
+    def initialization(self):
         self.currentUser = input("Enter username:")
         answer = input("Do you want to load container from file?[y/n]")
         if answer == "y":
@@ -81,3 +81,43 @@ class Storage:
             with open(filePath, "w") as file:
                 file.write(" ".join(self.currentContainer))
                 file.close()
+
+    def switch(self):
+        self.storage[self.currentUser] = self.currentContainer
+        answer = input("Do you want to save container changes to file?[y/n]")
+        if answer == "y":
+            self.save()
+        self.initialization()
+
+    def commandControl(self):
+        self.initialization()
+        inputLine = input("> ")
+
+        while inputLine != "stop":
+            match = re.findall(r'\b\w+\b', inputLine)
+            command = match[0]
+            arguments = match[1:len(match)]
+
+            match command:
+                case "add":
+                    self.add(arguments)
+                case "remove":
+                    self.remove(arguments[0])
+                case "find":
+                    self.find(arguments)
+                case "list":
+                    self.list()
+                case "grep":
+                    self.grep(inputLine)
+                case "load":
+                    self.load()
+                case "save":
+                    self.save()
+                case "switch":
+                    self.switch()
+                case "help":
+                    print(self.listOfCommands)
+                case _:
+                    print("No such command")
+
+            inputLine = input("> ")
