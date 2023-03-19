@@ -25,6 +25,6 @@ def listOfWords(text: str):
 
 def readFromFile(filePath: str):
     if not os.path.exists(filePath):
-        filePath = "/home/ulya/Documents/IGI_labs/Lab_2/Task_1/test.txt"
+        filePath = "Task_1/test.txt"
     with open(filePath, "r") as file:
         return file.read()
