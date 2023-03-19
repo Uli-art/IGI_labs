@@ -1,3 +1,4 @@
+import os
 import re
 
 
@@ -11,6 +12,20 @@ class Storage:
         self.storage = dict[str, set]()
         self.currentUser = ""
         self.currentContainer = set()
+
+    def initialisation(self):
+        self.currentUser = input("Enter username:")
+        answer = input("Do you want to load container from file?[y/n]")
+        if answer == "y":
+            self.storage[self.currentUser] = set()
+            self.currentContainer = set()
+            self.load()
+        else:
+            if self.currentUser in self.storage.keys():
+                self.currentContainer = self.storage[self.currentUser]
+            else:
+                self.storage[self.currentUser] = set()
+                self.currentContainer = set()
 
     def add(self, arguments):
         self.currentContainer.update(arguments)
@@ -49,3 +64,20 @@ class Storage:
                 print("No such elements")
             else:
                 print(result)
+
+    def load(self):
+        filePath = input("Enter file path: ")
+        if not os.path.exists(filePath):
+            print("Path error: there is no corresponding file in this path")
+        else:
+            with open(filePath, "r") as file:
+                self.add(file.read().split(" "))
+
+    def save(self):
+        filePath = input("Enter file path: ")
+        if not os.path.exists(filePath):
+            print("Path error: there is no corresponding file in this path")
+        else:
+            with open(filePath, "w") as file:
+                file.write(" ".join(self.currentContainer))
+                file.close()
