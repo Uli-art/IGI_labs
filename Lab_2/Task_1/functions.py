@@ -16,7 +16,7 @@ def nonDeclarativeSentences(text: str):
 
 def averageLengthOfSentence(text: str):
     countOfSent = countOfSentences(text)
-    return textLength(text) / countOfSent if countOfSent != 0 else 0
+    return float(textLength(text)) / countOfSent if countOfSent != 0 else 0
 
 
 def averageLengthOfWord(text: str):
