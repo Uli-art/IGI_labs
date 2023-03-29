@@ -6,7 +6,7 @@ class Storage:
     storage: dict[str, set]
     currentUser: str
     currentContainer: set
-    listOfCommands = ["add", "remove", "find", "load", "save", "switch", "grep", "stop"]
+    listOfCommands = ["add", "remove", "find", "load", "save", "switch", "grep", "stop", "help"]
 
     def __init__(self):
         self.storage = dict[str, set]()
@@ -70,21 +70,29 @@ class Storage:
         if not os.path.exists(filePath):
             print("Path error: there is no corresponding file in this path")
         else:
-            with open(filePath, "r") as file:
-                self.add(file.read().split(" "))
+            try:
+                with open(filePath, "r") as file:
+                    self.add(file.read().replace('\n', '').split(" "))
+            except:
+                print("File error: can not open the file")
 
     def save(self):
         filePath = input("Enter file path: ")
         if not os.path.exists(filePath):
             print("Path error: there is no corresponding file in this path")
         else:
-            with open(filePath, "w") as file:
-                file.write(" ".join(self.currentContainer))
-                file.close()
+            try:
+                with open(filePath, "w") as file:
+                    file.write(" ".join(self.currentContainer))
+                    file.close()
+            except:
+                print("File error: can not open the file")
 
     def switch(self):
-        self.storage[self.currentUser] = self.currentContainer
-        answer = input("Do you want to save container changes to file?[y/n]")
+        answer = input("Do you want to save changes in the container?[y/n] ")
+        if answer == "y":
+            self.storage[self.currentUser] = self.currentContainer
+        answer = input("Do you want to save container to file?[y/n]")
         if answer == "y":
             self.save()
         self.initialization()
@@ -95,28 +103,65 @@ class Storage:
 
         while inputLine != "stop":
             match = re.findall(r'\b\w+\b', inputLine)
+
+            if len(match) == 0:
+                print("Input is empty")
+                inputLine = input("> ")
+                continue
+
             command = match[0]
             arguments = match[1:len(match)]
 
             match command:
                 case "add":
-                    self.add(arguments)
+                    if len(arguments) == 0:
+                        print(f"Too few arguments for this command. Expected: min 1, given: {len(arguments)}")
+                    else:
+                        self.add(arguments)
                 case "remove":
-                    self.remove(arguments[0])
+                    if len(arguments) == 0:
+                        print(f"Too few arguments for this command. Expected: 1, given: {len(arguments)}")
+                    elif len(arguments) >= 2:
+                        print(f"Too many arguments for this command. Expected: 1, given: {len(arguments)}")
+                    else:
+                        self.remove(arguments[0])
                 case "find":
-                    self.find(arguments)
+                    if len(arguments) == 0:
+                        print(f"Too few arguments for this command. Expected: min 1, given: {len(arguments)}")
+                    else:
+                        self.find(arguments)
                 case "list":
-                    self.list()
+                    if not len(arguments) == 0:
+                        print(f"Too many arguments for this command. Expected: 0, given: {len(arguments)}")
+                    else:
+                        self.list()
                 case "grep":
-                    self.grep(inputLine)
+                    if len(inputLine.split(" ")) == 1:
+                        print(f"Too few arguments for this command. Expected: 1, given: {len(inputLine.split()) - 1}")
+                    elif len(inputLine.split(" ")) >= 3:
+                        print(f"Too many arguments for this command. Expected: 1, given: {len(inputLine.split()) - 1}")
+                    else:
+                        self.grep(inputLine)
                 case "load":
-                    self.load()
+                    if not len(arguments) == 0:
+                        print(f"Too many arguments for this command. Expected: 0, given: {len(arguments)}")
+                    else:
+                        self.load()
                 case "save":
-                    self.save()
+                    if not len(arguments) == 0:
+                        print(f"Too many arguments for this command. Expected: 0, given: {len(arguments)}")
+                    else:
+                        self.save()
                 case "switch":
-                    self.switch()
+                    if not len(arguments) == 0:
+                        print(f"Too many arguments for this command. Expected: 0, given: {len(arguments)}")
+                    else:
+                        self.switch()
                 case "help":
-                    print(self.listOfCommands)
+                    if not len(arguments) == 0:
+                        print(f"Too many arguments for this command. Expected: 0, given: {len(arguments)}")
+                    else:
+                        print(self.listOfCommands)
                 case _:
                     print("No such command")
 

@@ -44,7 +44,7 @@ def topKRepeatedWordNGrams(text: str, k=10, n=4):
 
 def topKRepeatedSymbolNGrams(text: str, k=10, n=4):
     dictionary = {}
-    listOfWord = listOfWords(text)
+    listOfWord = listOfWords(text.lower())
     countOfWord = len(listOfWords(text))
     lenOfText = textLength(text)
     if lenOfText < n:

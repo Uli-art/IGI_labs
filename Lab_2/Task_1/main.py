@@ -6,9 +6,9 @@ from helpFunctions import readFromFile
 if __name__ == '__main__':
     answer = "y"
     while answer == "y":
-        readTextFromFile = input("Do you want to read text from file?[y/n]")
+        readTextFromFile = input("Do you want to read text from file?[y/n] ")
         if readTextFromFile == "y":
-            filePath = str(input("Enter file path or use default"))
+            filePath = str(input("Enter file path: "))
             text = readFromFile(filePath)
         else:
             text = input("Enter text to analyze: ")

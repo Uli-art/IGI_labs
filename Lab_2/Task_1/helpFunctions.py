@@ -25,6 +25,15 @@ def listOfWords(text: str):
 
 def readFromFile(filePath: str):
     if not os.path.exists(filePath):
-        filePath = "Task_1/test.txt"
-    with open(filePath, "r") as file:
-        return file.read()
+        print("Path error: there is no corresponding file in this path")
+        answer = input("Do you want to use the default file?[y/n] ")
+        if answer == "y":
+            filePath = "/home/ulya/Documents/IGI_labs/Lab_2/Task_1/test.txt"
+        else:
+            return ""
+    try:
+        with open(filePath, "r") as file:
+            return file.read()
+    except:
+        print("File error: can not open the file")
+        return ""
